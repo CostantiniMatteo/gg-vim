@@ -122,7 +122,7 @@ create_symlinks() {
     local target_path="$2"
 
     lnif "$source_path/.vimrc"         "$target_path/.vimrc"
-    lnif "$source_path/.vimrc.bundles" "$target_path/.vimrc.bundles"
+    lnif "$source_path/.vimrc.plugins" "$target_path/.vimrc.plugins"
     lnif "$source_path/.vimrc.before"  "$target_path/.vimrc.before"
     lnif "$source_path/.vim"           "$target_path/.vim"
 
@@ -144,11 +144,11 @@ setup_fork_mode() {
 
     if [ "$1" -eq '1' ]; then
         touch "$target_path/.vimrc.fork"
-        touch "$target_path/.vimrc.bundles.fork"
+        touch "$target_path/.vimrc.plugins.fork"
         touch "$target_path/.vimrc.before.fork"
 
         lnif "$source_path/.vimrc.fork"         "$target_path/.vimrc.fork"
-        lnif "$source_path/.vimrc.bundles.fork" "$target_path/.vimrc.bundles.fork"
+        lnif "$source_path/.vimrc.plugins.fork" "$target_path/.vimrc.plugins.fork"
         lnif "$source_path/.vimrc.before.fork"  "$target_path/.vimrc.before.fork"
 
         ret="$?"
@@ -164,8 +164,8 @@ setup_vundle() {
     vim \
         -u "$1" \
         "+set nomore" \
-        "+BundleInstall!" \
-        "+BundleClean" \
+        "+PluginInstall!" \
+        "+PluginClean" \
         "+qall"
 
     export SHELL="$system_shell"
