@@ -73,9 +73,9 @@
     endif
 " }
 
-" Use bundles config {
-    if filereadable(expand("~/.vimrc.bundles"))
-        source ~/.vimrc.bundles
+" Use plugins config {
+    if filereadable(expand("~/.vimrc.plugins"))
+        source ~/.vimrc.plugins
     endif
 " }
 
@@ -459,7 +459,7 @@
 " Plugins {
 
     " GoLang {
-        if count(g:spf13_bundle_groups, 'go')
+        if count(g:spf13_plugin_groups, 'go')
             let g:go_highlight_functions = 1
             let g:go_highlight_methods = 1
             let g:go_highlight_structs = 1
@@ -482,7 +482,7 @@
 
 
     " TextObj Sentence {
-        if count(g:spf13_bundle_groups, 'writing')
+        if count(g:spf13_plugin_groups, 'writing')
             augroup textobj_sentence
               autocmd!
               autocmd FileType markdown call textobj#sentence#init()
@@ -493,7 +493,7 @@
     " }
 
     " TextObj Quote {
-        if count(g:spf13_bundle_groups, 'writing')
+        if count(g:spf13_plugin_groups, 'writing')
             augroup textobj_quote
                 autocmd!
                 autocmd FileType markdown call textobj#quote#init()
@@ -710,7 +710,7 @@
     "}
 
     " YouCompleteMe {
-        if count(g:spf13_bundle_groups, 'youcompleteme')
+        if count(g:spf13_plugin_groups, 'youcompleteme')
             let g:acp_enableAtStartup = 0
 
             " enable completion from tags
@@ -752,7 +752,7 @@
     " }
 
     " neocomplete {
-        if count(g:spf13_bundle_groups, 'neocomplete')
+        if count(g:spf13_plugin_groups, 'neocomplete')
             let g:acp_enableAtStartup = 0
             let g:neocomplete#enable_at_startup = 1
             let g:neocomplete#enable_smart_case = 1
@@ -866,7 +866,7 @@
             let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
     " }
     " neocomplcache {
-        elseif count(g:spf13_bundle_groups, 'neocomplcache')
+        elseif count(g:spf13_plugin_groups, 'neocomplcache')
             let g:acp_enableAtStartup = 0
             let g:neocomplcache_enable_at_startup = 1
             let g:neocomplcache_enable_camel_case_completion = 1
@@ -982,8 +982,8 @@
     " }
 
     " Snippets {
-        if count(g:spf13_bundle_groups, 'neocomplcache') ||
-                    \ count(g:spf13_bundle_groups, 'neocomplete')
+        if count(g:spf13_plugin_groups, 'neocomplcache') ||
+                    \ count(g:spf13_plugin_groups, 'neocomplete')
 
             " Use honza's snippets.
             let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
@@ -1205,14 +1205,14 @@
     function! s:EditSpf13Config()
         call <SID>ExpandFilenameAndExecute("tabedit", "~/.vimrc")
         call <SID>ExpandFilenameAndExecute("vsplit", "~/.vimrc.before")
-        call <SID>ExpandFilenameAndExecute("vsplit", "~/.vimrc.bundles")
+        call <SID>ExpandFilenameAndExecute("vsplit", "~/.vimrc.plugins")
      
         execute bufwinnr(".vimrc") . "wincmd w"
         call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.local")
         wincmd l
         call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.before.local")
         wincmd l
-        call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.bundles.local")
+        call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.plugins.local")
      
         if <SID>IsSpf13Fork()
             execute bufwinnr(".vimrc") . "wincmd w"
@@ -1220,7 +1220,7 @@
             wincmd l
             call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.before.fork")
             wincmd l
-            call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.bundles.fork")
+            call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.plugins.fork")
         endif
      
         execute bufwinnr(".vimrc.local") . "wincmd w"
