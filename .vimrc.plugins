@@ -137,6 +137,7 @@
             Plugin 'kana/vim-textobj-user'
             Plugin 'kana/vim-textobj-indent'
             Plugin 'gcmt/wildfire.vim'
+            Plugin 'ryanoasis/vim-devicons'
         endif
     " }
 
@@ -276,8 +277,9 @@
 
     " Elixir {
         if count(g:spf13_plugin_groups, 'elixir')
-            Plugin 'elixir-editors/vim-elixir'
             Plugin 'carlosgaldino/elixir-snippets'
+            Plugin 'elixir-editors/vim-elixir'
+            Plugin 'mhinz/vim-mix-format'
             Plugin 'mattreduce/vim-mix'
         endif
     " }

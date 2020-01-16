@@ -46,7 +46,7 @@
     " Basics {
         set nocompatible        " Must be first line
         if !WINDOWS()
-            set shell=/bin/sh
+            set shell=/bin/zsh
         endif
     " }
 
@@ -121,16 +121,16 @@
         " Always switch to the current file directory
     endif
 
-    "set autowrite                       " Automatically write a file when leaving a modified buffer
-    set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
-    set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
-    set virtualedit=onemore             " Allow for cursor beyond last character
-    set history=1000                    " Store a ton of history (default is 20)
-    set spell                           " Spell checking on
-    set hidden                          " Allow buffer switching without saving
-    set iskeyword-=.                    " '.' is an end of word designator
-    set iskeyword-=#                    " '#' is an end of word designator
-    set iskeyword-=-                    " '-' is an end of word designator
+    "set autowrite                                       " Automatically write a file when leaving a modified buffer
+    set shortmess+=filmnrxoOtT                          " Abbrev. of messages (avoids 'hit enter')
+    set viewoptions=folds,options,cursor,unix,slash     " Better Unix / Windows compatibility
+    set virtualedit=onemore                             " Allow for cursor beyond last character
+    set history=1000                                    " Store a ton of history (default is 20)
+    set spell                                           " Spell checking on
+    set hidden                                          " Allow buffer switching without saving
+    set iskeyword-=.                                    " '.' is an end of word designator
+    set iskeyword-=#                                    " '#' is an end of word designator
+    set iskeyword-=-                                    " '-' is an end of word designator
 
     " Instead of reverting the cursor to the last position in the buffer, we
     " set it to the first line when editing a git commit message
@@ -195,43 +195,42 @@
     "highlight clear CursorLineNr    " Remove highlight color from current line number
 
     if has('cmdline_info')
-        set ruler                   " Show the ruler
-        set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
-        set showcmd                 " Show partial commands in status line and
-                                    " Selected characters/lines in visual mode
+        set ruler                                           " Show the ruler
+        set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)  " A ruler on steroids
+        set showcmd                                         " Show partial commands in status line and selected characters/lines in visual mode
     endif
 
     if has('statusline')
         set laststatus=2
 
         " Broken down into easily includeable segments
-        set statusline=%<%f\                     " Filename
-        set statusline+=%w%h%m%r                 " Options
+        set statusline=%<%f\                            " Filename
+        set statusline+=%w%h%m%r                        " Options
         if !exists('g:override_spf13_bundles')
-            set statusline+=%{fugitive#statusline()} " Git Hotness
+            set statusline+=%{fugitive#statusline()}    " Git Hotness
         endif
-        set statusline+=\ [%{&ff}/%Y]            " Filetype
-        set statusline+=\ [%{getcwd()}]          " Current dir
-        set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+        set statusline+=\ [%{&ff}/%Y]                   " Filetype
+        set statusline+=\ [%{getcwd()}]                 " Current dir
+        set statusline+=%=%-14.(%l,%c%V%)\ %p%%         " Right aligned file nav info
     endif
 
-    set backspace=indent,eol,start  " Backspace for dummies
-    set linespace=0                 " No extra spaces between rows
-    set number                      " Line numbers on
-    set showmatch                   " Show matching brackets/parenthesis
-    set incsearch                   " Find as you type search
-    set hlsearch                    " Highlight search terms
-    set winminheight=0              " Windows can be 0 line high
-    set ignorecase                  " Case insensitive search
-    set smartcase                   " Case sensitive when uc present
-    set wildmenu                    " Show list instead of just completing
-    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
-    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
-    set scrolljump=5                " Lines to scroll when cursor leaves screen
-    set scrolloff=3                 " Minimum lines to keep above and below cursor
-    set foldenable                  " Auto fold code
+    set backspace=indent,eol,start                  " Backspace for dummies
+    set linespace=0                                 " No extra spaces between rows
+    set number relativenumber                       " Line numbers on
+    set showmatch                                   " Show matching brackets/parenthesis
+    set incsearch                                   " Find as you type search
+    set hlsearch                                    " Highlight search terms
+    set winminheight=0                              " Windows can be 0 line high
+    set ignorecase                                  " Case insensitive search
+    set smartcase                                   " Case sensitive when uc present
+    set wildmenu                                    " Show list instead of just completing
+    set wildmode=list:longest,full                  " Command <Tab> completion, list matches, then longest common part, then all.
+    set whichwrap=b,s,h,l,<,>,[,]                   " Backspace and cursor keys wrap too
+    set scrolljump=5                                " Lines to scroll when cursor leaves screen
+    set scrolloff=3                                 " Minimum lines to keep above and below cursor
+    set foldenable                                  " Auto fold code
     set list
-    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
+    set listchars=tab:›\ ,trail:•,extends:#,nbsp:.  " Highlight problematic whitespace
 
 " }
 
@@ -239,10 +238,10 @@
 
     set nowrap                      " Do not wrap long lines
     set autoindent                  " Indent at the same level of the previous line
-    set shiftwidth=4                " Use indents of 4 spaces
+    set shiftwidth=2                " Use indents of 2 spaces
     set expandtab                   " Tabs are spaces, not tabs
-    set tabstop=4                   " An indentation every four columns
-    set softtabstop=4               " Let backspace delete indent
+    set tabstop=2                   " An indentation every four columns
+    set softtabstop=2               " Let backspace delete indent
     set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
     set splitright                  " Puts new vsplit windows to the right of the current
     set splitbelow                  " Puts new split windows to the bottom of the current
@@ -641,6 +640,8 @@
     " ctrlp {
         if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
             let g:ctrlp_working_path_mode = 'ra'
+            let g:ctrlp_dont_split = 'NERD_tree_1'
+
             nnoremap <silent> <D-t> :CtrlP<CR>
             nnoremap <silent> <D-r> :CtrlPMRU<CR>
             let g:ctrlp_custom_ignore = {
