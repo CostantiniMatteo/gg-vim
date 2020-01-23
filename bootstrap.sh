@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#   Copyright 2014 Steve Francia
+#   Copyright 2020 Luigi Clemente
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
 #   limitations under the License.
 
 ############################  SETUP PARAMETERS
-app_name='spf13-vim'
-[ -z "$APP_PATH" ] && APP_PATH="$HOME/.spf13-vim-3"
-[ -z "$REPO_URI" ] && REPO_URI='https://github.com/spf13/spf13-vim.git'
-[ -z "$REPO_BRANCH" ] && REPO_BRANCH='3.0'
+app_name='gg-vim'
+[ -z "$APP_PATH" ] && APP_PATH="$HOME/.gg-vim-4"
+[ -z "$REPO_URI" ] && REPO_URI='https://github.com/Gigitsu/gg-vim.git'
+[ -z "$REPO_BRANCH" ] && REPO_BRANCH='4.0'
 debug_mode='0'
 fork_maintainer='0'
 [ -z "$VUNDLE_URI" ] && VUNDLE_URI="https://github.com/gmarik/vundle.git"
@@ -122,12 +122,10 @@ create_symlinks() {
     local target_path="$2"
 
     lnif "$source_path/.vimrc"         "$target_path/.vimrc"
-    lnif "$source_path/.vimrc.plugins" "$target_path/.vimrc.plugins"
+    lnif "$source_path/.vimrc.plugs" "$target_path/.vimrc.plugs"
     lnif "$source_path/.vimrc.before"  "$target_path/.vimrc.before"
-    lnif "$source_path/.vim"           "$target_path/.vim"
 
     if program_exists "nvim"; then
-        lnif "$source_path/.vim"       "$target_path/.config/nvim"
         lnif "$source_path/.vimrc"     "$target_path/.config/nvim/init.vim"
     fi
 
@@ -144,34 +142,17 @@ setup_fork_mode() {
 
     if [ "$1" -eq '1' ]; then
         touch "$target_path/.vimrc.fork"
-        touch "$target_path/.vimrc.plugins.fork"
+        touch "$target_path/.vimrc.plugs.fork"
         touch "$target_path/.vimrc.before.fork"
 
         lnif "$source_path/.vimrc.fork"         "$target_path/.vimrc.fork"
-        lnif "$source_path/.vimrc.plugins.fork" "$target_path/.vimrc.plugins.fork"
+        lnif "$source_path/.vimrc.plugs.fork" "$target_path/.vimrc.plugs.fork"
         lnif "$source_path/.vimrc.before.fork"  "$target_path/.vimrc.before.fork"
 
         ret="$?"
         success "Created fork maintainer files."
         debug
     fi
-}
-
-setup_vundle() {
-    local system_shell="$SHELL"
-    export SHELL='/bin/sh'
-
-    vim \
-        -u "$1" \
-        "+set nomore" \
-        "+PluginInstall!" \
-        "+PluginClean" \
-        "+qall"
-
-    export SHELL="$system_shell"
-
-    success "Now updating/installing plugins using Vundle"
-    debug
 }
 
 ############################ MAIN()
@@ -194,13 +175,6 @@ create_symlinks "$APP_PATH" \
 setup_fork_mode "$fork_maintainer" \
                 "$APP_PATH" \
                 "$HOME"
-
-sync_repo       "$HOME/.vim/bundle/vundle" \
-                "$VUNDLE_URI" \
-                "master" \
-                "vundle"
-
-setup_vundle    "$APP_PATH/.vimrc.bundles.default"
 
 msg             "\nThanks for installing $app_name."
 msg             "© `date +%Y` http://vim.spf13.com/"

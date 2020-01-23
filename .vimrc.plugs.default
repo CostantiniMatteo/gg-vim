@@ -1,0 +1,24 @@
+" Default Bundles {
+
+    " Install Vim Plug if not already installed {
+        if empty(glob('~/.vim/autoload/plug.vim'))
+            silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        endif
+    " }
+
+    " Use before config if available {
+        if filereadable(expand("~/.vimrc.before"))
+            source ~/.vimrc.before
+        endif
+    " }
+
+    " Use bundles config {
+        if filereadable(expand("~/.vimrc.plugs"))
+            source ~/.vimrc.plugs
+        endif
+    " }
+
+    " Install Plugs {
+        autocmd VimEnter * PlugInstall --sync
+    " }
+" }
