@@ -1,12 +1,11 @@
 " Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 "
-"                    __ _ _____              _
-"         ___ _ __  / _/ |___ /      __   __(_)_ __ ___
-"        / __| '_ \| |_| | |_ \ _____\ \ / /| | '_ ` _ \
-"        \__ \ |_) |  _| |___) |_____|\ V / | | | | | | |
-"        |___/ .__/|_| |_|____/        \_/  |_|_| |_| |_|
-"            |_|
+"           ______ ______      _    __ _
+"          / ____// ____/     | |  / /(_)____ ___
+"         / / __ / / __ ______| | / // // __ `__ \
+"        / /_/ // /_/ //_____/| |/ // // / / / / /
+"        \____/ \____/        |___//_//_/ /_/ /_/
 "
 "   This is the personal .vimrc file of Steve Francia.
 "   While much of it is beneficial for general use, I would
@@ -123,7 +122,7 @@
 
     "set autowrite                                       " Automatically write a file when leaving a modified buffer
     set shortmess+=filmnrxoOtT                          " Abbrev. of messages (avoids 'hit enter')
-    set viewoptions=folds,options,cursor,unix,slash     " Better Unix / Windows compatibility
+    set viewoptions=folds,options,cursor,unix,slash     " Better Unix / Windows compatibility{}
     set virtualedit=onemore                             " Allow for cursor beyond last character
     set history=1000                                    " Store a ton of history (default is 20)
     set spell                                           " Spell checking on
@@ -177,12 +176,15 @@
 
 " Vim UI {
 
-    if !exists('g:override_spf13_bundles') && filereadable(expand("~/.vim/plugged/vim-colors-solarized/colors/solarized.vim"))
-        let g:solarized_termcolors=256
+    if !exists('g:override_spf13_bundles') && filereadable(expand("~/.vim/plugged/vim-solarized8/colors/solarized8.vim"))
+        " let g:solarized_termcolors=256
+        " let g:solarized_contrast="normal"
+        " let g:solarized_visibility="high"
+        " let g:solarized_diffmode="high"
+        " let g:solarized_statusline="flat"
         let g:solarized_termtrans=1
-        let g:solarized_contrast="normal"
-        let g:solarized_visibility="normal"
-        color solarized             " Load a colorscheme
+        
+        color solarized8             " Load a colorscheme
     endif
 
     set tabpagemax=15               " Only show 15 tabs
@@ -521,7 +523,7 @@
     " OmniComplete {
         " To disable omni complete, add the following to your .vimrc.before.local file:
         "   let g:spf13_no_omni_complete = 1
-        if !exists('g:spf13_no_omni_complete')
+        if exists('g:spf13_no_omni_complete')
             if has("autocmd") && exists("+omnifunc")
                 autocmd Filetype *
                     \if &omnifunc == "" |
@@ -982,6 +984,132 @@
         endif
     " }
 
+    " Conquer of Completion {
+        if count(g:spf13_plugin_groups, 'coc')
+            set nobackup
+            set nowritebackup
+
+            " Better display for messages
+            " set cmdheight=2
+
+            set shortmess+=c
+            set updatetime=300
+
+            " always show signcolumns
+            set signcolumn=yes
+
+            " Use tab for trigger completion with characters ahead and navigate.
+            " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+            inoremap <silent><expr> <TAB>
+                  \ pumvisible() ? "\<C-n>" :
+                  \ <SID>check_back_space() ? "\<TAB>" :
+                  \ coc#refresh()
+            inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+            function! s:check_back_space() abort
+              let col = col('.') - 1
+              return !col || getline('.')[col - 1]  =~# '\s'
+            endfunction
+
+            " Use <c-space> to trigger completion.
+            inoremap <silent><expr> <c-space> coc#refresh()
+
+            " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+            " Coc only does snippet and additional edit on confirm.
+            " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+            " Or use `complete_info` if your vim support it, like:
+            inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+            " Use `[g` and `]g` to navigate diagnostics
+            nmap <silent> [g <Plug>(coc-diagnostic-prev)
+            nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+            " Remap keys for gotos
+            nmap <silent> gd <Plug>(coc-definition)
+            nmap <silent> gy <Plug>(coc-type-definition)
+            nmap <silent> gi <Plug>(coc-implementation)
+            nmap <silent> gr <Plug>(coc-references)
+
+            " Use K to show documentation in preview window
+            nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+            function! s:show_documentation()
+              if (index(['vim','help'], &filetype) >= 0)
+                execute 'h '.expand('<cword>')
+              else
+                call CocAction('doHover')
+              endif
+            endfunction
+
+            " Highlight symbol under cursor on CursorHold
+            autocmd CursorHold * silent call CocActionAsync('highlight')
+
+            " Remap for rename current word
+            nmap <leader>rn <Plug>(coc-rename)
+
+            " Remap for format selected region
+            xmap <leader>f  <Plug>(coc-format-selected)
+            nmap <leader>f  <Plug>(coc-format-selected)
+
+            augroup mygroup
+              autocmd!
+              " Setup formatexpr specified filetype(s).
+              autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+              " Update signature help on jump placeholder
+              autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+            augroup end
+
+            " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+            xmap <leader>a  <Plug>(coc-codeaction-selected)
+            nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+            " Remap for do codeAction of current line
+            nmap <leader>ac  <Plug>(coc-codeaction)
+            " Fix autofix problem of current line
+            nmap <leader>qf  <Plug>(coc-fix-current)
+
+            " Create mappings for function text object, requires document symbols feature of languageserver.
+            xmap if <Plug>(coc-funcobj-i)
+            xmap af <Plug>(coc-funcobj-a)
+            omap if <Plug>(coc-funcobj-i)
+            omap af <Plug>(coc-funcobj-a)
+
+            " Use <TAB> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+            nmap <silent> <TAB> <Plug>(coc-range-select)
+            xmap <silent> <TAB> <Plug>(coc-range-select)
+
+            " Use `:Format` to format current buffer
+            command! -nargs=0 Format :call CocAction('format')
+
+            " Use `:Fold` to fold current buffer
+            command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+            " use `:OR` for organize import of current buffer
+            command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+            " Add status line support, for integration with other plugin, checkout `:h coc-status`
+            set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+            " Using CocList
+            " Show all diagnostics
+            nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+            " Manage extensions
+            nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+            " Show commands
+            nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+            " Find symbol of current document
+            nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+            " Search workspace symbols
+            nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+            " Do default action for next item.
+            nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+            " Do default action for previous item.
+            nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+            " Resume latest coc list
+            nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+        endif
+    " }
+
     " Snippets {
         if count(g:spf13_plugin_groups, 'neocomplcache') ||
                     \ count(g:spf13_plugin_groups, 'neocomplete')
@@ -1052,6 +1180,8 @@
         " See `:echo g:airline_theme_map` for some more choices
         " Default in terminal vim is 'dark'
         if isdirectory(expand("~/.vim/plugged/vim-airline-themes/"))
+            let g:bufferline_echo = 0
+            let g:airline#extensions#tabline#enabled = 1
             if !exists('g:airline_theme')
                 let g:airline_theme = 'solarized'
             endif
