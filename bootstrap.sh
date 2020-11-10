@@ -17,7 +17,7 @@
 ############################  SETUP PARAMETERS
 app_name='gg-vim'
 [ -z "$APP_PATH" ] && APP_PATH="$HOME/.gg-vim-4"
-[ -z "$REPO_URI" ] && REPO_URI='https://github.com/Gigitsu/gg-vim.git'
+[ -z "$REPO_URI" ] && REPO_URI='https://github.com/CostantiniMatteo/gg-vim.git'
 [ -z "$REPO_BRANCH" ] && REPO_BRANCH='4.0'
 debug_mode='0'
 fork_maintainer='0'
